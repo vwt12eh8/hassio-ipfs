@@ -1,0 +1,14 @@
+{
+  "domain": "ipfs",
+  "name": "IPFS",
+  "codeowners": [
+    "@vwt12eh8"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/vwt12eh8/hassio-ipfs",
+  "integration_type": "service",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/vwt12eh8/hassio-ipfs/issues",
+  "requirements": [],
+  "version": "0.0.1"
+}

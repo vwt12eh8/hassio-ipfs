@@ -1,0 +1,22 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "data": {
+                    "url": "API URL",
+                    "verify_ssl": "API TLS検証",
+                    "gateway": "IPFSゲートウェイ URL"
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "gateway": "IPFSゲートウェイ URL"
+                }
+            }
+        }
+    }
+}
