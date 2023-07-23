@@ -1,0 +1,101 @@
+name_publish:
+  name: IPNS Publish
+  description: Publish IPNS names.
+  fields:
+    device_id:
+      name: Instance
+      description: ""
+      required: true
+      selector:
+        device:
+          filter:
+            - integration: ipfs
+    arg:
+      name: arg
+      description: "ipfs path of the object to be published."
+      required: true
+      selector:
+        text:
+    resolve:
+      name: resolve
+      description: "Check if the given path can be resolved before publishing."
+      selector:
+        boolean:
+    lifetime:
+      name: lifetime
+      description: 'Time duration that the record will be valid for. This accepts durations such as "300s", "1.5h" or "2h45m". Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".'
+      selector:
+        text:
+    allow_offline:
+      name: allow-offline
+      description: "When offline, save the IPNS record to the the local datastore without broadcasting to the network instead of simply failing."
+      selector:
+        boolean:
+    ttl:
+      name: ttl
+      description: "Time duration this record should be cached for. Uses the same syntax as the lifetime option. (caution: experimental)."
+      selector:
+        text:
+    key:
+      name: key
+      description: "Name of the key to be used or a valid PeerID, as listed by 'ipfs key list -l'."
+      selector:
+        text:
+    quieter:
+      name: quieter
+      description: "Write only final hash."
+      selector:
+        boolean:
+    ipns_base:
+      name: ipns-base
+      description: "Encoding used for keys: Can either be a multibase encoded CID or a base58btc encoded multihash. Takes {b58mh|base36|k|base32|b...}."
+      selector:
+        text:
+
+pin_add:
+  name: Pin
+  description: Pin objects to local storage.
+  fields:
+    device_id:
+      name: Instance
+      description: ""
+      required: true
+      selector:
+        device:
+          filter:
+            - integration: ipfs
+    arg:
+      name: arg
+      description: Path to object(s) to be pinned.
+      required: true
+      selector:
+        text:
+    recursive:
+      name: recursive
+      description: Recursively pin the object linked to by the specified object(s).
+      selector:
+        boolean:
+
+pin_rm:
+  name: Unpin
+  description: Remove object from pin-list.
+  fields:
+    device_id:
+      name: Instance
+      description: ""
+      required: true
+      selector:
+        device:
+          filter:
+            - integration: ipfs
+    arg:
+      name: arg
+      description: Path to object(s) to be unpinned.
+      required: true
+      selector:
+        text:
+    recursive:
+      name: recursive
+      description: Recursively unpin the object linked to by the specified object(s).
+      selector:
+        boolean:

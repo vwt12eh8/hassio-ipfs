@@ -52,6 +52,38 @@ class KuboRpc:
     async def id(self, arg: str | None = None, format: str | None = None):
         return cast(Id, await self._post("id", arg=arg, format=format))
 
+    async def name_publish(
+        self,
+        arg: str,
+        resolve: bool | None = None,
+        lifetime: str | None = None,
+        allow_offline: bool | None = None,
+        ttl: str | None = None,
+        key: str | None = None,
+        quieter: bool | None = None,
+        ipns_base: str | None = None,
+    ):
+        return cast(
+            dict,
+            await self._post(
+                "pin/add",
+                arg=arg,
+                resolve=resolve,
+                lifetime=lifetime,
+                allow_offline=allow_offline,
+                ttl=ttl,
+                key=key,
+                quieter=quieter,
+                ipns_base=ipns_base,
+            ),
+        )
+
+    async def pin_add(self, arg: str, recursive: bool | None = None):
+        return cast(dict, await self._post("pin/add", arg=arg, recursive=recursive))
+
+    async def pin_rm(self, arg: str, recursive: bool | None = None):
+        return cast(dict, await self._post("pin/rm", arg=arg, recursive=recursive))
+
     async def stats_bw(self):
         return cast(dict, await self._post("stats/bw"))
 
@@ -83,7 +115,9 @@ class KuboRpc:
 
 
 def _to_query(**kwargs):
-    args = [f"{x[0]}={x[1]}" for x in kwargs.items() if x[1] is not None]
+    args = [
+        f"{x[0].replace('_','-')}={x[1]}" for x in kwargs.items() if x[1] is not None
+    ]
     if not args:
         return ""
     return "?" + "&".join(args)
