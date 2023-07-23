@@ -46,7 +46,7 @@ class KuboRpc:
     ):
         return cast(
             list[LsEntry],
-            (await self._post("files/ls", arg=arg, long=long, U=U))["Entries"],
+            (await self._post("files/ls", arg=arg, long=long, U=U))["Entries"] or [],
         )
 
     async def id(self, arg: str | None = None, format: str | None = None):
