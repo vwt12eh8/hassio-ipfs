@@ -1,5 +1,6 @@
 from typing import cast
 
+import homeassistant.helpers.config_validation as cv
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_DEVICE_ID, CONF_URL, CONF_VERIFY_SSL, Platform
 from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse
@@ -7,13 +8,13 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import device_registry
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.device_registry import DeviceEntryType
-from voluptuous import Schema
 
 from .kubo_rpc import KuboRpc
 
-CONFIG_SCHEMA = Schema({})
 CONF_GATEWAY = "gateway"
 DOMAIN = "ipfs"
+
+CONFIG_SCHEMA = cv.removed(DOMAIN, raise_if_present=False)
 
 _PLATFORMS = {
     Platform.SENSOR,
