@@ -25,7 +25,7 @@ from homeassistant.helpers.update_coordinator import (
 )
 
 from . import DOMAIN
-from .kubo_rpc import KuboRpc, SwarmPeers
+from .kubo_rpc import KuboRpc, SwarmPeersEntry
 
 _LOGGER = getLogger(__name__)
 
@@ -41,7 +41,7 @@ async def async_setup_entry(
         update_interval=timedelta(seconds=5),
         update_method=kubo.stats_bw,
     )
-    peers = DataUpdateCoordinator[SwarmPeers](
+    peers = DataUpdateCoordinator[list[SwarmPeersEntry]](
         hass,
         _LOGGER,
         name="swarm/peers",
@@ -103,7 +103,9 @@ class DataEntity(CoordinatorEntity[DataUpdateCoordinator[dict]], SensorEntity):
         return self.coordinator.data[self._key]
 
 
-class PeersEntity(CoordinatorEntity[DataUpdateCoordinator[SwarmPeers]], SensorEntity):
+class PeersEntity(
+    CoordinatorEntity[DataUpdateCoordinator[list[SwarmPeersEntry]]], SensorEntity
+):
     _attr_has_entity_name = True
     _attr_icon = "mdi:cube-outline"
     _attr_name = "Peers"
@@ -112,7 +114,7 @@ class PeersEntity(CoordinatorEntity[DataUpdateCoordinator[SwarmPeers]], SensorEn
 
     def __init__(
         self,
-        coordinator: DataUpdateCoordinator[SwarmPeers],
+        coordinator: DataUpdateCoordinator[list[SwarmPeersEntry]],
         device: DeviceInfo,
     ):
         super().__init__(coordinator)
@@ -122,7 +124,7 @@ class PeersEntity(CoordinatorEntity[DataUpdateCoordinator[SwarmPeers]], SensorEn
     def native_value(self):
         if not self.coordinator.data:
             return None
-        return len(self.coordinator.data["Peers"])
+        return len(self.coordinator.data)
 
 
 class NumObjectsEntity(CoordinatorEntity[DataUpdateCoordinator[dict]], SensorEntity):

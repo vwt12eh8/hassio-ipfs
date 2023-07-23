@@ -25,10 +25,6 @@ class SwarmPeersEntry(TypedDict):
     Identify: dict
 
 
-class SwarmPeers(TypedDict):
-    Peers: list[SwarmPeersEntry]
-
-
 class Version(TypedDict):
     Commit: str
     Golang: str
@@ -48,12 +44,10 @@ class KuboRpc:
         long: bool | None = None,
         U: bool | None = None,
     ):
-        res = await self._session.post(
-            f"{self.url}/api/v0/files/ls" + _to_query(arg=arg, long=long, U=U)
+        return cast(
+            list[LsEntry],
+            (await self._post("files/ls", arg=arg, long=long, U=U))["Entries"],
         )
-        if not res.ok:
-            raise Exception(f"status: {res.status}")
-        return cast(list[LsEntry], (await res.json())["Entries"])
 
     async def id(self, arg: str | None = None, format: str | None = None):
         return cast(Id, await self._post("id", arg=arg, format=format))
@@ -65,7 +59,7 @@ class KuboRpc:
         return cast(dict, await self._post("stats/repo", **{"size-only": size_only}))
 
     async def swarm_peers(self):
-        return cast(SwarmPeers, await self._post("swarm/peers"))
+        return cast(list[SwarmPeersEntry], (await self._post("swarm/peers"))["Peers"])
 
     async def version(
         self,
@@ -74,13 +68,12 @@ class KuboRpc:
         repo: bool | None = None,
         all: bool | None = None,
     ):
-        res = await self._session.post(
-            f"{self.url}/api/v0/version"
-            + _to_query(number=number, commit=commit, repo=repo, all=all)
+        return cast(
+            Version,
+            await self._post(
+                "version", number=number, commit=commit, repo=repo, all=all
+            ),
         )
-        if not res.ok:
-            raise Exception(f"status: {res.status}")
-        return cast(Version, await res.json())
 
     async def _post(self, ep: str, **kwargs):
         res = await self._session.post(f"{self.url}/api/v0/{ep}" + _to_query(**kwargs))
